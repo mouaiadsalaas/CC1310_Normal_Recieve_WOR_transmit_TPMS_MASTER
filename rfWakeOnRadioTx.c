@@ -10,6 +10,7 @@
 /* XDCtools Header files */
 #include <xdc/std.h>
 #include <xdc/runtime/Assert.h>
+#include <xdc/runtime/System.h>
 
 /* BIOS Header files */
 #include <ti/sysbios/BIOS.h>
@@ -26,6 +27,7 @@
 /* Driver Header files */
 #include <ti/drivers/GPIO.h>
 #include <ti/drivers/Power.h>
+#include <ti/drivers/UART.h>
 
 #include <ti/display/Display.h>
 #define delayMs(a)                Task_sleep(a*1000 / Clock_tickPeriod);
@@ -45,7 +47,8 @@
 Task_Struct task0Struct,
             task1Struct,
             task2Struct,
-            task3Struct;
+            task3Struct,
+            task4Struct;
 
 Clock_Struct clk2Struct;
 Clock_Struct clk0Struct, clk1Struct;
@@ -55,7 +58,23 @@ Clock_Struct clk0Struct, clk1Struct;
 Char task0Stack[THREADSTACKSIZE],
      task1Stack[THREADSTACKSIZE],
      task2Stack[THREADSTACKSIZE],
-     task3Stack[THREADSTACKSIZE];
+     task3Stack[THREADSTACKSIZE],
+     task4Stack[THREADSTACKSIZE];
+
+
+
+
+char str[400] = {0};
+
+char sends[150];
+Clock_Handle clk2Handle;
+Clock_Handle clk2Handle;
+UART_Handle uart;
+uint32_t Rx_data_index = 0;
+char Rx_data[100];
+unsigned char buf[128] = {0};
+uint32_t GlobalCounter = 0;
+bool tick = 0;
 /******************************************************************************/
 /***** Defines *****/
 /* Wake-on-Radio configuration */
@@ -196,6 +215,113 @@ bool listen_process = false;
 
 int counter_for_packet = 0;
 int counter_to_reset = 0;
+
+Void clk0Fxn(UArg arg0)
+{
+    GlobalCounter++;
+    tick=true;
+}
+
+///*UART write function*/
+//void GPRS_SendAtCommand( const char * data ){
+//    //GPRS_BufferClear();
+//   UART_write(uart, (unsigned char *)data, strlen(data));
+//}
+
+
+void uartReadCallback(UART_Handle handle, void *buf, size_t indexcount){
+    //memset(Rx_data, '0', sizeof(Rx_data));
+    strncpy(&Rx_data[Rx_data_index], (char *)buf, indexcount);
+    Rx_data_index+=indexcount;
+}
+
+
+void uartThread(UArg arg0, UArg arg1)
+{
+    char rcvData;
+    UART_Params uartParams;
+
+    /* Create a UART with data processing off. */
+    UART_Params_init(&uartParams);
+    uartParams.writeDataMode = UART_DATA_TEXT;
+    uartParams.readDataMode = UART_DATA_TEXT;
+    uartParams.readMode = UART_MODE_CALLBACK;
+    uartParams.readCallback = &uartReadCallback;
+    uartParams.readTimeout = 10;
+    uartParams.readReturnMode = UART_RETURN_FULL;
+    uartParams.readEcho = UART_ECHO_OFF;
+    uartParams.baudRate = 115200;
+    uart = UART_open(Board_UART0, &uartParams);
+
+    if (uart == NULL) {
+        /* UART_open() failed */
+        while (1);
+    }
+
+    /* Loop forever echoing */
+    while (1) {
+
+        UART_read(uart, &rcvData, 1);
+        delayMs(10);
+    }
+}
+
+void clockThread(UArg arg0, UArg arg1)
+{
+    /* Construct BIOS Objects */
+    Clock_Params clkParams;
+
+    /* Call driver init functions */
+    Clock_Params_init(&clkParams);
+    clkParams.period = 1000;     //1 seconde
+    clkParams.startFlag = TRUE;
+    //startFlag = true; //starts immediatley
+    //startFlag = false; //starts after timeout.
+
+    /* Construct a periodic Clock Instance */
+    Clock_construct(&clk0Struct, (Clock_FuncPtr)clk0Fxn,
+                    1, &clkParams);
+
+
+    clk2Handle = Clock_handle(&clk0Struct);
+
+    Clock_start(clk2Handle);
+    //Clock_stop(clk2Handle);
+
+    while (1) {
+
+        delayMs(10);
+    }
+
+}
+/*UART write function*/
+void SendCommand( const char * data ){
+    //GPRS_BufferClear();
+   UART_write(uart, (unsigned char *)data, strlen(data));
+}
+
+void setData( char * data){
+    SendCommand(data);
+}
+
+void *mainThread(void *arg0)
+{
+
+    /* Loop forever echoing */
+    while (1) {
+        //GPRS_SendAtCommand("OMAR\r\n");
+        delayMs(10);
+        /*UART write function*/
+//        sprintf(sends,"t0.txt=\"%d\"\xFF\xFF\xFF",1);
+        sprintf(sends,"t0.txt=\"kerem\"\xFF\xFF\xFF");
+
+        SendCommand(sends);
+    }
+}
+
+
+
+
 /***** Function definitions *****/
 /* Pin interrupt Callback function board buttons configured in the pinTable. */
 void buttonCallbackFunction(PIN_Handle handle, PIN_Id pinId) {
@@ -453,6 +579,7 @@ int main(void){
 
     Board_initGeneral();
     GPIO_init();
+    UART_init();
 
     ledPinHandle = PIN_open(&ledPinState, pinTable);
     Assert_isTrue(ledPinHandle != NULL, NULL);
@@ -479,6 +606,25 @@ int main(void){
     taskParams.stack = &task1Stack;
     taskParams.instance->name = "RXTask";
     Task_construct(&task1Struct, (Task_FuncPtr)RXTask, &taskParams, NULL);
+
+
+    Task_Params_init(&taskParams);
+    taskParams.stackSize = THREADSTACKSIZE;
+    taskParams.stack = &task2Stack;
+    taskParams.instance->name = "mainThread";
+    Task_construct(&task2Struct, (Task_FuncPtr)mainThread, &taskParams, NULL);
+
+    Task_Params_init(&taskParams);
+    taskParams.stackSize = THREADSTACKSIZE;
+    taskParams.stack = &task3Stack;
+    taskParams.instance->name = "uartThread";
+    Task_construct(&task3Struct, (Task_FuncPtr)uartThread, &taskParams, NULL);
+
+    Task_Params_init(&taskParams);
+    taskParams.stackSize = THREADSTACKSIZE;
+    taskParams.stack = &task4Stack;
+    taskParams.instance->name = "clockThread";
+    Task_construct(&task4Struct, (Task_FuncPtr)clockThread, &taskParams, NULL);
 
 
     BIOS_start();

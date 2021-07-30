@@ -87,6 +87,23 @@ rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/
 rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/Error.h
 rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/Types.h
 rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/Assert__epilogue.h
+rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/System.h
+rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/Types.h
+rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/IModule.h
+rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/Assert.h
+rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/ISystemSupport.h
+rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/Types.h
+rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/IModule.h
+rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/IGateProvider.h
+rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/package/System_SupportProxy.h
+rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/Types.h
+rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/ISystemSupport.h
+rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/package/System_Module_GateProxy.h
+rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/Types.h
+rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/IInstance.h
+rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/IGateProvider.h
+rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/package/System_SupportProxy.h
+rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/package/System_Module_GateProxy.h
 rfWakeOnRadioTx.obj: C:/ti/simplelink_cc13x0_sdk_4_10_01_01/kernel/tirtos/packages/ti/sysbios/BIOS.h
 rfWakeOnRadioTx.obj: C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/Types.h
 rfWakeOnRadioTx.obj: C:/ti/simplelink_cc13x0_sdk_4_10_01_01/kernel/tirtos/packages/ti/sysbios/BIOS__prologue.h
@@ -203,6 +220,7 @@ rfWakeOnRadioTx.obj: C:/ti/simplelink_cc13x0_sdk_4_10_01_01/source/ti/drivers/PI
 rfWakeOnRadioTx.obj: C:/ti/simplelink_cc13x0_sdk_4_10_01_01/source/ti/devices/cc13x0/driverlib/rf_prop_mailbox.h
 rfWakeOnRadioTx.obj: C:/ti/simplelink_cc13x0_sdk_4_10_01_01/source/ti/drivers/GPIO.h
 rfWakeOnRadioTx.obj: C:/ti/simplelink_cc13x0_sdk_4_10_01_01/source/ti/drivers/Power.h
+rfWakeOnRadioTx.obj: C:/ti/simplelink_cc13x0_sdk_4_10_01_01/source/ti/drivers/UART.h
 rfWakeOnRadioTx.obj: C:/ti/simplelink_cc13x0_sdk_4_10_01_01/source/ti/display/Display.h
 rfWakeOnRadioTx.obj: C:/ti/simplelink_cc13x0_sdk_4_10_01_01/source/ti/devices/cc13x0/driverlib/cpu.h
 rfWakeOnRadioTx.obj: C:/ti/simplelink_cc13x0_sdk_4_10_01_01/source/ti/devices/cc13x0/driverlib/../inc/hw_types.h
@@ -313,6 +331,23 @@ C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/Diags.h:
 C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/Error.h: 
 C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/Types.h: 
 C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/Assert__epilogue.h: 
+C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/System.h: 
+C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/Types.h: 
+C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/IModule.h: 
+C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/Assert.h: 
+C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/ISystemSupport.h: 
+C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/Types.h: 
+C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/IModule.h: 
+C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/IGateProvider.h: 
+C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/package/System_SupportProxy.h: 
+C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/Types.h: 
+C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/ISystemSupport.h: 
+C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/package/System_Module_GateProxy.h: 
+C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/Types.h: 
+C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/IInstance.h: 
+C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/IGateProvider.h: 
+C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/package/System_SupportProxy.h: 
+C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/package/System_Module_GateProxy.h: 
 C:/ti/simplelink_cc13x0_sdk_4_10_01_01/kernel/tirtos/packages/ti/sysbios/BIOS.h: 
 C:/ti/ccs930/xdctools_3_60_02_34_core/packages/xdc/runtime/Types.h: 
 C:/ti/simplelink_cc13x0_sdk_4_10_01_01/kernel/tirtos/packages/ti/sysbios/BIOS__prologue.h: 
@@ -429,6 +464,7 @@ C:/ti/simplelink_cc13x0_sdk_4_10_01_01/source/ti/drivers/PIN.h:
 C:/ti/simplelink_cc13x0_sdk_4_10_01_01/source/ti/devices/cc13x0/driverlib/rf_prop_mailbox.h: 
 C:/ti/simplelink_cc13x0_sdk_4_10_01_01/source/ti/drivers/GPIO.h: 
 C:/ti/simplelink_cc13x0_sdk_4_10_01_01/source/ti/drivers/Power.h: 
+C:/ti/simplelink_cc13x0_sdk_4_10_01_01/source/ti/drivers/UART.h: 
 C:/ti/simplelink_cc13x0_sdk_4_10_01_01/source/ti/display/Display.h: 
 C:/ti/simplelink_cc13x0_sdk_4_10_01_01/source/ti/devices/cc13x0/driverlib/cpu.h: 
 C:/ti/simplelink_cc13x0_sdk_4_10_01_01/source/ti/devices/cc13x0/driverlib/../inc/hw_types.h: 
