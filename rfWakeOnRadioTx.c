@@ -1,3 +1,26 @@
+/*
+ *TIRE PRESSURE MONITORING SYSTEM
+ *Monitor Side
+ *Date   : 23.07.2021
+ *Author : MOUAIAD SALAAS
+ *this project copy right return to INOVAR R&D SOLUTIONS limited company
+ */
+
+
+//NOTES:
+/*(CC1310)
+ *1.OUR USED PINS ARE:
+ *                        IOID_20   :   FXTH Activate PIN ,
+ *
+ *                        IOID_XX   :   UART Tx PIN ,
+ *                        IOID_XX   :   UART Rx PIN ,
+ *
+ */
+
+/*-------------------------------------------------------0.Preparing Section------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------------------------------------*/
+
+/************************************************************ Includes ***********************************************************************/
 /* Standard C Libraries */
 #include <stdlib.h>
 #include <stdint.h>
@@ -210,12 +233,21 @@ bool wor_rf_processing_flag   = false;      //flag to rise if wor id   rf sendin
 bool reset_flag = false;
 bool start_lesitning = true;
 bool start_wor = false;
+bool flagrise = false;
+bool rx_For_wor = false;
 
 bool listen_process = false;
 
 int counter_for_packet = 0;
 int counter_to_reset = 0;
 
+char bufUart[99];
+uint8_t bufIndex = 0;
+uint8_t rcv_ch_0xff = 0;
+uint8_t mysensor_id = 0;
+ char rcv_ch;
+
+void SendCommand( const char * data );
 Void clk0Fxn(UArg arg0)
 {
     GlobalCounter++;
@@ -230,9 +262,42 @@ Void clk0Fxn(UArg arg0)
 
 
 void uartReadCallback(UART_Handle handle, void *buf, size_t indexcount){
-    //memset(Rx_data, '0', sizeof(Rx_data));
-    strncpy(&Rx_data[Rx_data_index], (char *)buf, indexcount);
-    Rx_data_index+=indexcount;
+
+
+    strncpy(&rcv_ch, (char *)buf, indexcount);
+
+
+    if(bufIndex == 0 && rcv_ch != 0x70)
+    {
+        return;
+    }
+
+    bufUart[bufIndex++] = rcv_ch;
+
+    if( rcv_ch == 0xFF ){
+
+        rcv_ch_0xff++;
+    }
+
+    if(rcv_ch_0xff == 3)
+    {
+        if (bufUart[1] == 'B' && bufUart[2] == 'B')
+        {
+            bufIndex = 0;
+            rcv_ch_0xff = 0;
+            flagrise = true;
+            start_lesitning = false;
+            start_wor = true;
+            rx_For_wor = true;
+            Semaphore_post(txSemaphoreHandle);
+
+        }else{
+            bufIndex = 0;
+            rcv_ch_0xff = 0;
+            flagrise = false;
+        }
+    }
+
 }
 
 
@@ -247,7 +312,7 @@ void uartThread(UArg arg0, UArg arg1)
     uartParams.readDataMode = UART_DATA_TEXT;
     uartParams.readMode = UART_MODE_CALLBACK;
     uartParams.readCallback = &uartReadCallback;
-    uartParams.readTimeout = 10;
+    uartParams.readTimeout = 1;
     uartParams.readReturnMode = UART_RETURN_FULL;
     uartParams.readEcho = UART_ECHO_OFF;
     uartParams.baudRate = 115200;
@@ -260,6 +325,9 @@ void uartThread(UArg arg0, UArg arg1)
 
     /* Loop forever echoing */
     while (1) {
+
+        sprintf(sends,"get va0.txt\xFF\xFF\xFF");
+        SendCommand(sends);
 
         UART_read(uart, &rcvData, 1);
         delayMs(10);
@@ -313,9 +381,10 @@ void *mainThread(void *arg0)
         delayMs(10);
         /*UART write function*/
 //        sprintf(sends,"t0.txt=\"%d\"\xFF\xFF\xFF",1);
-        sprintf(sends,"t0.txt=\"kerem\"\xFF\xFF\xFF");
+//        SPRINTF(SENDS,"T0.TXT=\"KEREM\"\XFF\XFF\XFF");
+//        SENDCOMMAND(SENDS);
+//        DELAYMS(10);
 
-        SendCommand(sends);
     }
 }
 
@@ -332,6 +401,7 @@ void buttonCallbackFunction(PIN_Handle handle, PIN_Id pinId) {
         /* Post TX semaphore to TX task */
         start_lesitning = false;
         start_wor = true;
+        rx_For_wor = true;
         Semaphore_post(txSemaphoreHandle);
     }
 }
@@ -486,6 +556,10 @@ void *RXTask(void *arg0)
                         {
                             case PROP_DONE_OK:
                                 // Packet received with CRC OK
+                                if(rx_For_wor == true){
+                                    mysensor_id = packet[4];
+                                    rx_For_wor = false;
+                                }
                                 break;
                             case PROP_DONE_RXERR:
                                 // Packet received with CRC error
